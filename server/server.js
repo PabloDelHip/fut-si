@@ -18,6 +18,7 @@ app.get('/', function (req, res) {
     res.send('Hello World')
   });
 
+//guardar datos
 app.post('/usuario', function (req, res) {
 
     let body = req.body;
@@ -38,6 +39,7 @@ app.post('/usuario', function (req, res) {
     
 });
 
+//obtener usuario por id
 app.put('/usuario/:id', function (req, res) {
     let id = req.params.id;
 
@@ -46,6 +48,7 @@ app.put('/usuario/:id', function (req, res) {
     });
 });
 
+//eliminar usuario
 app.delete('/usuario', function (req, res) {
     res.send('Delete usuarios')
 });
