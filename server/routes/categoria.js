@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors');
 const bcrypt = require('bcrypt'); //libreria para poder encriptar las contraseñas
 const _ = require('underscore'); //libreria para realizar diferentes funciones por el momento se esta usando para: validar los datos que vamos a mandar
                                 //para el modelo, con la funcion PICK
@@ -6,6 +7,13 @@ const Categoria = require('../models/categoria');
 
 
 const app = express();
+app.use(cors())
+
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+
 
 //retornar todas las organizaciones
 //BIEN//
@@ -67,7 +75,8 @@ app.get('/categoria/:id', function (req, res) {
                         ok: false,
                         err: {
                             message: 'Categoria no encontrada'
-                        }
+                        },
+                        categoria
                     });
                 }
 
@@ -88,7 +97,7 @@ app.get('/categoria/:id', function (req, res) {
   app.get('/categoria/usuario/:id', function (req, res) {
 
     let condiciones = {
-        id_usuario: req.params.id,
+        usuario: req.params.id,
         estado: true
     }
 
@@ -151,8 +160,8 @@ app.post('/categoria', function (req, res) {
     let categoria = new Categoria({
         titulo: body.titulo,
         edad_minima, 
-        edad_maxima: body.edad_maxima, 
-        id_usuario: body.id_usuario, 
+        edad_maxima, 
+        usuario: body.usuario, 
     });
 
     categoria.save( (err, categoriaDB) => {
@@ -178,7 +187,7 @@ app.post('/categoria', function (req, res) {
 //editar redes sociales
 app.put('/categoria/:id', function (req, res) {
     let id = req.params.id;
-    let body = _.pick(req.body, ['titulo', 'edad_minima', 'edad_maxima', 'id_usuario']);
+    let body = _.pick(req.body, ['titulo', 'edad_minima', 'edad_maxima']);
             
     Categoria.findByIdAndUpdate(id, body, {new: true}, (err, categoriaDB) => {
         

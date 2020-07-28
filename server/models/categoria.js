@@ -14,14 +14,15 @@ let CategoriaSchema = new Schema({
     edad_maxima: {
         type: Number
     },
-    id_usuario: {
-        type: Number,
-        require: [true,'El ID del usuario es Obligatorio']
-    },
     estado:{
         type: Boolean,
         default: true
-    }
+    },
+    usuario: {
+        type: Schema.Types.ObjectId,
+        ref:'Usuario',
+        required: [true,'El usuario es Obligatorio']
+    },
 });
 
 module.exports = mongoose.model('categoria',CategoriaSchema, "categorias");
