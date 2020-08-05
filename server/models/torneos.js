@@ -73,6 +73,21 @@ let Torneoschema = new Schema({
         type: Boolean,
         default: false
     },
+    instalacion: {
+        type: Schema.Types.ObjectId,
+        ref:'Instalacion',
+        required: [true,'La instalación es Obligatorio']
+    },
+    categoria: {
+        type: Schema.Types.ObjectId,
+        ref:'Categoria',
+        required: [true,'La instalación es Obligatorio']
+    },
+    usuario: {
+        type: Schema.Types.ObjectId,
+        ref:'Usuario',
+        required: [true,'El usuario es Obligatorio']
+    },
     estado:{
         type: Boolean,
         default: true

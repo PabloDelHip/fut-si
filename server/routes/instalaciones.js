@@ -92,6 +92,47 @@ app.get('/instalacion/:id', function (req, res) {
 
   });
 
+  app.get('/instalacion/usuario/:id', function (req, res) {
+
+    let condiciones = {
+        usuario: req.params.id,
+        estado: true
+    }
+
+    Instalacion.find(condiciones,'nombre estado_pais municipio direccion codigo_postal telefono celular email sitio_web latitud_map longitud_map vestuarios camisetas estacionamiento cafeteria restaurante tiendas notas estado')
+            .exec( (err,instalacion) => {
+                if(err)
+                {
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+                if(instalacion.length === 0)
+                {
+                    return res.status(400).json({
+                        ok: false,
+                        err: {
+                            message: 'Instalacion no encontrada'
+                        }
+                    });
+                }
+
+                Instalacion.count(condiciones, (err, total) => {
+                    
+                    res.json({
+                        ok:true,
+                        total,
+                        instalacion,
+                        
+                    });
+
+                });
+            });
+
+  });
+
 //guardar datos
 //BIEN
 app.post('/instalacion', function (req, res) {
