@@ -39,6 +39,9 @@ app.use(require('./routes/tabla'));
 app.use(require('./routes/login'));
 app.use(require('./routes/ciudades'));
 app.use(require('./routes/imagen_instalaciones'));
+app.use(require('./routes/tipos_torneos'));
+app.use(require('./routes/torneo_instalacion'));
+app.use(require('./routes/modo_juego'));
 //app.use(require('./routes/logino'));
 
 // app.use(require('./routes/login'));

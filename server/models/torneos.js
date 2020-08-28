@@ -8,11 +8,6 @@ let Torneoschema = new Schema({
         type: String,
         require: [true,'El nombre del torneo Obligatorio']
     },
-    descripcion: {
-        type: String,
-        minlength: [100,"Es necesario ingresar minimo 100 caracteres"],
-        require: [true,'La descripción es Obligatoria']
-    },
     duracion_tiempo: {
         type: String,
         require: [true,'La duración de cada tiempo del partido es obligatorio']
@@ -73,15 +68,46 @@ let Torneoschema = new Schema({
         type: Boolean,
         default: false
     },
-    instalacion: {
-        type: Schema.Types.ObjectId,
-        ref:'Instalacion',
-        required: [true,'La instalación es Obligatorio']
-    },
     categoria: {
         type: Schema.Types.ObjectId,
         ref:'Categoria',
         required: [true,'La instalación es Obligatorio']
+    },
+    tipo_torneo: {
+        type: Schema.Types.ObjectId,
+        ref:'Tipo_Torneo',
+        required: [true,'El tipo de torneo Obligatorio']
+    },
+    modo_juego: {
+        type: Schema.Types.ObjectId,
+        ref:'Modo_juego',
+        default: '0'
+    },
+    campeon: {
+        type: Number, //1: primer lugar campeon, 2:liguilla, 3: eliminacion directa
+        default: 0,
+        required: [true,'El campo tipo de campeon Obligatorio']
+        
+    },
+    num_equipos_grupos: {
+        type: Number,
+        default: 0
+
+    },
+    vueltas_torneo: {
+        type: Number,
+        default: 0,
+        required: [true,'Vueltas Torneo es Obligatorio']
+    },
+    vueltas_eliminacion: {
+        type: Number,
+        default: 0,
+        required: [true,'Vueltas Eliminacion es Obligatorio']
+    },
+    vueltas_final: {
+        type: Number,
+        default: 0,
+        required: [true,'Vueltas Final es Obligatorio']
     },
     usuario: {
         type: Schema.Types.ObjectId,
@@ -91,9 +117,18 @@ let Torneoschema = new Schema({
     estado:{
         type: Boolean,
         default: true
+    },
+    activo:{
+        type: Boolean,
+        default: true
     }
 });
 
+// liguilla/primer lugar campeon/eliminacion directa
+// num equipos clasifican
+//vueltas partidos
+
+
 //agregar ID formato del torneo
 
-module.exports = mongoose.model('torneo',Torneoschema, "torneos");
+module.exports = mongoose.model('Torneo',Torneoschema, "torneos");

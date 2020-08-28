@@ -147,42 +147,4 @@ app.put('/tipo-torneo/:id', function (req, res) {
     }) 
 });
 
-//eliminar organizacion
-app.delete('/categoria/:id', function (req, res) {
-    
-    let id = req.params.id;
-
-    let cambiaEstado = {
-        estado: false
-    }
-    tipoTorneo.findByIdAndUpdate(id, cambiaEstado, {new: true}, (err, tipo_torneoBorrado) => {
-
-        if(err)
-        {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        if(tipo_torneoBorrado.length === 0)
-        {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Tipo Torneo no encontrado'
-                }
-            });
-        }
-
-        res.json({
-            ok:true,
-            tipo_torneo: tipo_torneoBorrado
-        })
-
-    });
-    
-    // res.send('Delete usuarios')
-});
-
 module.exports = app;

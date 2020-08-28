@@ -52,7 +52,48 @@ app.get('/torneos/:id', function (req, res) {
         estado: true
     }
 
-    Torneo.find(condiciones,'nombre descripcion duracion_tiempo sexo_jugadores fecha_inicio fecha_final_temporada fecha_limite_pagos costo_inscripcion costo_albitraje notas lunes martes miercoles jueves viernes sabado domingo estado')
+    Torneo.find(condiciones,'nombre duracion_tiempo sexo_jugadores fecha_inicio fecha_final_temporada fecha_limite_pagos costo_inscripcion costo_albitraje notas lunes martes miercoles jueves viernes sabado domingo categoria tipo_torneo')
+            .exec( (err,torneo) => {
+                if(err)
+                {
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+                if(torneo.length === 0)
+                {
+                    return res.status(400).json({
+                        ok: false,
+                        err: {
+                            message: 'Torneo no encontrado'
+                        }
+                    });
+                }
+
+                Torneo.count(condiciones, (err, total) => {
+                    
+                    res.json({
+                        ok:true,
+                        total,
+                        torneo,
+                        
+                    });
+
+                });
+            });
+
+  });
+
+  app.get('/torneos/usuario/:id', function (req, res) {
+
+    let condiciones = {
+        usuario: req.params.id,
+        estado: true
+    }
+
+    Torneo.find(condiciones,'nombre activo')
             .exec( (err,torneo) => {
                 if(err)
                 {
@@ -93,7 +134,6 @@ app.post('/torneos', function (req, res) {
     let body = req.body;
     let torneos = new Torneo({
         nombre: body.nombre,
-        descripcion: body.descripcion,
         duracion_tiempo: body.duracion_tiempo,
         sexo_jugadores: body.sexo_jugadores,
         fecha_inicio: body.fecha_inicio,
@@ -108,7 +148,17 @@ app.post('/torneos', function (req, res) {
         jueves: body.jueves,
         viernes: body.viernes,
         sabado: body.sabado,
-        domingo: body.domingo
+        domingo: body.domingo,
+        instalacion: body.instalacion,
+        categoria: body.categoria,
+        tipo_torneo: body.tipo_torneo,
+        modo_juego: body.modo_juego,
+        campeon: body.campeon,
+        num_equipos: body.num_equipos,
+        vueltas_torneo: body.vueltas_torneo,
+        vueltas_eliminacion: body.vueltas_eliminacion,
+        vueltas_final: body.vueltas_final,
+        usuario: body.usuario
     });
 
 
