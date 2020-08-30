@@ -71,42 +71,21 @@ app.get('/torneos-instalaciones/torneo/:id', function (req, res) {
 //guardar datos
 //BIEN
 app.post('/torneos-instalaciones', function (req, res) {
-
     let body = req.body;
-
-
-    let torneo_instalacion = new TorneoInstalacion({
-        torneo: body.torneo,
-        instalacion: body.instalacion,
-        usuario: body.usuario
-    });
-
-    torneo_instalacion.save( (err, torneoInstalacionDB) => {
-       
-        if(err)
-        {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok:true,
-            torneo_instalacion: torneoInstalacionDB
-        })
-
-    });
+    const datos = saveTorneoInstalacion(body.torneo, body.instalacion, body.usuario);
+    res.json({
+        datos   
+    })
     
 });
 
 
 //editar redes sociales
-app.put('/tipo-torneo/:id', function (req, res) {
+app.put('/torneos-instalaciones/torneo/:id_torneo/instalacion/:id_instalacion', function (req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre']);
             
-    tipoTorneo.findByIdAndUpdate(id, body, {new: true}, (err, tipo_torneoDB) => {
+    TorneoInstalacion.findByIdAndUpdate(id, body, {new: true}, (err, tipo_torneoDB) => {
         
         if(err)
         {
@@ -124,14 +103,18 @@ app.put('/tipo-torneo/:id', function (req, res) {
 });
 
 //eliminar organizacion
-app.delete('/categoria/:id', function (req, res) {
-    
+app.put('/torneos-instalaciones/torneo/:id', function (req, res) {
+    let body = req.body;
     let id = req.params.id;
 
     let cambiaEstado = {
         estado: false
     }
-    tipoTorneo.findByIdAndUpdate(id, cambiaEstado, {new: true}, (err, tipo_torneoBorrado) => {
+    let condiciones = {
+        torneo: req.params.id,
+        estado: true
+    }
+    TorneoInstalacion.updateMany(condiciones, cambiaEstado, {new: true}, (err, torneo_instalacionBorrado) => {
 
         if(err)
         {
@@ -141,19 +124,11 @@ app.delete('/categoria/:id', function (req, res) {
             });
         }
 
-        if(tipo_torneoBorrado.length === 0)
-        {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Tipo Torneo no encontrado'
-                }
-            });
-        }
+        activarTorneoInstalacion(body.torneo_instalaciones,id, body.id_usuario);
 
         res.json({
             ok:true,
-            tipo_torneo: tipo_torneoBorrado
+            torneo_instalacion: torneo_instalacionBorrado
         })
 
     });
@@ -161,4 +136,61 @@ app.delete('/categoria/:id', function (req, res) {
     // res.send('Delete usuarios')
 });
 
+function activarTorneoInstalacion(instalaciones,id_torneo, id_usuario)
+{
+
+    instalaciones.forEach(instalacion => {
+        console.log(instalacion);
+        let cambiaEstado = {
+            estado: true
+        }
+        let condiciones = [{
+            torneo: id_torneo,
+            instalacion: instalacion._id,
+            estado: false
+        }];
+    
+        TorneoInstalacion.findOneAndUpdate({ $and: condiciones }, cambiaEstado, {new: true}, (err, torneo_instalacion) => {
+    
+            if(err)
+            {
+                console.log(err)
+            }         
+    
+            if(torneo_instalacion == null){
+                
+                const datos = saveTorneoInstalacion(id_torneo, instalacion._id, id_usuario);
+                
+            }
+        });
+    });
+}
+function saveTorneoInstalacion(id_torneo, id_instalacion, id_usuario)
+{
+    let torneo_instalacion = new TorneoInstalacion({
+        torneo: id_torneo,
+        instalacion: id_instalacion,
+        usuario: id_usuario
+    });
+
+    torneo_instalacion.save( (err, torneoInstalacionDB) => {
+        
+        if(err)
+        {
+            console.log( err);
+            return [{
+                ok: false,
+                err
+            }]
+        }
+
+        return [{
+            ok:true,
+            torneo_instalacion: torneoInstalacionDB
+        }]
+
+        
+
+    });
+}
 module.exports = app;
