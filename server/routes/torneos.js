@@ -154,7 +154,7 @@ app.post('/torneos', function (req, res) {
         tipo_torneo: body.tipo_torneo,
         modo_juego: body.modo_juego,
         campeon: body.campeon,
-        num_equipos: body.num_equipos,
+        equipos_clasifican_final: body.equipos_clasifican_final,
         vueltas_torneo: body.vueltas_torneo,
         vueltas_eliminacion: body.vueltas_eliminacion,
         vueltas_final: body.vueltas_final,
@@ -163,7 +163,6 @@ app.post('/torneos', function (req, res) {
 
 
     torneos.save( (err, torneosDB) => {
-       
         if(err)
         {
             return res.status(400).json({
@@ -176,16 +175,16 @@ app.post('/torneos', function (req, res) {
             ok:true,
             torneo: torneosDB
         })
-
     });
     
 });
 
 
 
-app.put('/torneos/:id', function (req, res) {
+app.put('/torneo/:id', function (req, res) {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'descripcion', 'duracion_tiempo', 'sexo_jugadores', 'fecha_inicio', 'fecha_final_temporada', 'fecha_limite_pagos', 'costo_inscripcion', 'costo_albitraje', 'notas', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo']);
+    let body = _.pick(req.body, ['nombre', 'duracion_tiempo', 'sexo_jugadores', 'fecha_inicio', 'fecha_final_temporada', 'fecha_limite_pagos', 'costo_inscripcion', 'costo_albitraje', 'notas', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo', 'instalacion', 'categoria', 'tipo_torneo', 'modo_juego', 'campeon', 'equipos_clasifican_final', 'vueltas_torneo', 'vueltas_eliminacion', 'vueltas_final',
+    ]);
             
     Torneo.findByIdAndUpdate(id, body, {new: true}, (err, torneoDB) => {
         
@@ -205,7 +204,7 @@ app.put('/torneos/:id', function (req, res) {
 });
 
 //eliminar organizacion
-app.delete('/torneos/:id', function (req, res) {
+app.delete('/torneo/:id', function (req, res) {
     
     let id = req.params.id;
 

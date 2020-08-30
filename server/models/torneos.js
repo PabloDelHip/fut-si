@@ -81,33 +81,21 @@ let Torneoschema = new Schema({
     modo_juego: {
         type: Schema.Types.ObjectId,
         ref:'Modo_juego',
-        default: '0'
     },
     campeon: {
-        type: Number, //1: primer lugar campeon, 2:liguilla, 3: eliminacion directa
-        default: 0,
-        required: [true,'El campo tipo de campeon Obligatorio']
-        
+        type: String, //1: primer lugar campeon, 2:liguilla, 3: eliminacion directa
     },
-    num_equipos_grupos: {
+    equipos_clasifican_final: {
         type: Number,
-        default: 0
-
     },
     vueltas_torneo: {
         type: Number,
-        default: 0,
-        required: [true,'Vueltas Torneo es Obligatorio']
     },
     vueltas_eliminacion: {
         type: Number,
-        default: 0,
-        required: [true,'Vueltas Eliminacion es Obligatorio']
     },
     vueltas_final: {
         type: Number,
-        default: 0,
-        required: [true,'Vueltas Final es Obligatorio']
     },
     usuario: {
         type: Schema.Types.ObjectId,
